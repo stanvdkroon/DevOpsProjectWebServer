@@ -1,0 +1,139 @@
+{% extends "scheduler/base.html" %}
+
+{% load static %}
+{% load scheduler_extras %}
+
+{% block title %}
+    Admin
+{% endblock %}
+
+{% block main %}
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+    <script src="{% static 'django_eventstream/eventsource.min.js' %}"></script>
+    <script src="{% static 'django_eventstream/reconnecting-eventsource.js' %}"></script>
+
+    <script type="text/javascript">
+        const project_id = "{{ project.id }}";
+    </script>
+
+    <h1 class="text-center" id="project_name">{{ project.name }}</h1>
+
+
+    <ul class="nav nav-tabs" id="admin-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#project" role="tab"
+               aria-controls="project"
+               aria-selected="true">Project</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#staff" role="tab" aria-controls="staff"
+               aria-selected="false">Staff</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="result-tab" data-toggle="tab" href="#result" role="tab" aria-controls="staff"
+               aria-selected="false">Schedule</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="admin-content">
+        <div id="project" class="tab-pane fade show active" role="tabpanel" aria-labelledby="project-tab">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <button type="button" id="upload_project_button" class="btn btn-success">Save</button>
+                    <label for="invite_link">Invite an new staff member.</label>
+                    <input type="text" id="invite_link" class="form-control"
+                           value="{% absolute_url 'add_assistant' project_name=project.name user_id=project.owner.id secret=project.secret %}"
+                           readonly>
+                </div>
+
+                <div class="col-10">
+                    <table
+                            id="table"
+                            data-minimum-count-columns="2"
+                            data-id-field="id"
+                            data-unique-id="slots"
+                            data-response-handler="responseHandler">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="staff" class="tab-pane fade" role="tabpanel" aria-labelledby="staff-tab">
+            <div class="row">
+                <div class="col-3">
+                    <div class="staff-list list-group">
+                        {% for member in staff %}
+                            <button type="button" class="list-group-item member-link"
+                                    data-uid="{{ member.id }}">{{ member }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="row mt-2">
+                        <div class="col">
+                            {% if staff.first %}
+                                <h4 class="text-center" id="member_name"
+                                    data-uid="{{ staff.first.id }}">{{ staff.first }}</h4>
+                            {% else %}
+                                <h4 class="text-center" id="member_name"
+                                    data-uid="">No staff assigned yet.</h4>
+                            {% endif %}
+                        </div>
+                        <div class="col input-group mb-3">
+                            <label for="period_count" class="col col-form-label">Assigned periods:</label>
+                            <input type="number" class="form-control" id="period_count" placeholder="Assigned periods"
+                                   aria-label="Assigned number of periods" aria-describedby="update_periods">
+                            <div class="input-group-append">
+                                <button class="btn input-group-text" id="update_periods">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table
+                            id="table-availability"
+                            data-minimum-count-columns="2"
+                            data-id-field="id"
+                            data-unique-id="slots"
+                            data-response-handler="responseHandler">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="result" class="tab-pane fade show" role="tabpanel" aria-labelledby="result-tab">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <button type="button" id="scheduler_button" class="btn btn-success">Schedule</button>
+                    <div class="form-group">
+                        <label for="logs">Scheduler Logs</label>
+                        <textarea class="form-control" id="logs" rows="5" readonly></textarea>
+                    </div>
+
+                    <div class="input-group-append">
+                        <button class="btn input-group-text" id="update_schedule">Update</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stats">Statistics:
+                            <button type="button" id="stats_button" class="btn btn-success">Analyze</button>
+                        </label>
+                        <textarea class="form-control" id="stats" rows="15" readonly></textarea>
+                    </div>
+                </div>
+
+                <div class="col-10">
+                    <table
+                            id="table-result"
+                            data-minimum-count-columns="2"
+                            data-id-field="id"
+                            data-unique-id="slots"
+                            data-response-handler="responseHandler">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{% static 'scheduler/scripts/admin_project.js' %}"></script>
+{% endblock %}

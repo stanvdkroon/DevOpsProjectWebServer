@@ -1,0 +1,50 @@
+{% extends "scheduler/base.html" %}
+
+{%  load static %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <script src="{%  static 'scheduler/scripts/register.js' %}"></script>
+    <div class="row form-page">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Register</h5>
+                    <form class="form-signin" action="{% url 'register_post' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-label-group">
+                            <input type="username" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
+                            <label for="inputUsername">Username</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+                            <label for="inputEmail">Email address</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+                            <label for="inputPassword">Password</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="inputPasswordConfirmation" name="password_confirmation" class="form-control" placeholder="Password Confirmation" required>
+                            <label for="inputPasswordConfirmation">Password confirmation</label>
+                        </div>
+                        <input hidden type="text" id="redirect" name="redirect" class="form-control" value="{{ redirect }}">
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
+                    </form>
+                    <hr class="my-4">
+                    <form class="form-signin" action="{% url 'get_login' %}" method="POST">
+                        {% csrf_token %}
+                        <input hidden type="text" id="redirect" name="redirect" class="form-control" value="{{ redirect }}">
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase btn-login" type="submit">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

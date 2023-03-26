@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+
+    {% include 'scheduler/header.html' %}
+    {% include 'scheduler/scripts.html' %}
+</head>
+
+{% include 'scheduler/nav.html' %}
+
+<body>
+<main class="container-flex main m-4">
+    {% block main %}{% endblock %}
+</main>
+</body>
+
+<footer class="small text-center text-muted bottom mb-1">
+    Scheduler by Quinten, Jari, Joris, Stan.
+</footer>
+
+</html>

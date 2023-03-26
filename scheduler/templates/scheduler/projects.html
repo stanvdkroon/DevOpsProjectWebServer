@@ -1,0 +1,39 @@
+{% extends "scheduler/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Projects
+{% endblock %}
+
+{% block main %}
+    <script src="{% static 'scheduler/scripts/projects.js' %}"></script>
+
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h3>Your created projects.</h3>
+            <ul>
+                {% for project in owned_projects %}
+                    <li><a href="{% url 'admin_project' %}?project={{ project.id }}">{{ project.name }}</a></li>
+                {% empty %}
+                    <li>You do not admin any project.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'create_project' %}" class="btn btn-outline-secondary" id="create_a_project">Create a Project</a>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h3>Your attended projects.</h3>
+            <ul>
+                {% for project in projects %}
+                    <li><a href="{% url 'availability' %}?project={{ project.id }}">{{ project.name }}</a></li>
+                {% empty %}
+                    <li>You are not assigned to any project.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

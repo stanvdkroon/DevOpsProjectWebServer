@@ -1,0 +1,69 @@
+{% extends "scheduler/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Create a Project
+{% endblock %}
+
+{% block main %}
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="project_name" placeholder="Project Name"
+                       aria-label="Choose a name" aria-describedby="basic-addon2">
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="add_column_name" placeholder="Column Name"
+                       aria-label="Add a Column" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" id="add_column" type="button">Add</button>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="add_row_name" placeholder="Row Name"
+                       aria-label="Add a row" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" id="add_row" type="button">Add</button>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <input type="number" class="form-control" id="default_count"
+                       placeholder="Default Number of Staff = 0"
+                       aria-label="Choose a number" aria-describedby="basic-addon2">
+            </div>
+            <div class="input-group mb-3">
+                <input type="number" class="form-control" id="default_hours"
+                       placeholder="Default Number of working periods"
+                       aria-label="Choose a number" aria-describedby="basic-addon2">
+            </div>
+            <button type="button" id="upload_project_button" class="btn btn-success">Save</button>
+        </div>
+
+        <div class="col-8">
+            <div id="toolbar">
+                <button id="remove" class="btn btn-danger" disabled>
+                    <i class="glyphicon glyphicon-remove"></i> Delete
+                </button>
+            </div>
+
+            <table
+                    id="table"
+                    data-toolbar="#toolbar"
+                    data-click-to-select="true"
+                    data-minimum-count-columns="2"
+                    data-id-field="id"
+                    data-unique-id="id"
+                    data-response-handler="responseHandler">
+            </table>
+        </div>
+    </div>
+
+    <script src="{% static 'scheduler/scripts/create_project.js' %}"></script>
+{% endblock %}

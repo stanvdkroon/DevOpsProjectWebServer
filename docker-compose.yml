@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=genius_password
+    volumes:
+      - postgres_data:/var/lib/postresql/data/
+
+  migration:
+    build: .
+    entrypoint: python3 manage.py makemigrations & python3 manage.py migrate
+    environment:
+      - DATABASE_HOST=db
+      - AZURE_FUNCTION=https://genius-scheduler.azurewebsites.net/api/genius-scheduler?code=wwcGMhVOx14Eq5Gk-h-jwruIvo51720_m_kGPdTHmOGgAzFun8PC6g==
+    depends_on:
+      - db
+
+  web:
+    build: .
+    command: bash -c "daphne -b 0.0.0.0 -p 80 ScheduleQ.asgi:application"
+    environment:
+      - DATABASE_HOST=quinner.nl
+      - AZURE_FUNCTION=https://genius-scheduler.azurewebsites.net/api/genius-scheduler?code=wwcGMhVOx14Eq5Gk-h-jwruIvo51720_m_kGPdTHmOGgAzFun8PC6g==
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+      - migration
+
+volumes:
+  postgres_data:

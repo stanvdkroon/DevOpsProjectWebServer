@@ -1,0 +1,70 @@
+{% extends "scheduler/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Availability
+{% endblock %}
+
+{% block main %}
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+    <script type="text/javascript">
+        const project_id = "{{ project.id }}";
+    </script>
+
+    <ul class="nav nav-tabs" id="user-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#availability" role="tab"
+               aria-controls="availability"
+               aria-selected="true">Availability</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="schedule-tab" data-toggle="tab" href="#schedule" role="tab" aria-controls="schedule"
+               aria-selected="false">Schedule</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content" id="user-content">
+        <div id="availability" class="tab-pane fade show active" role="tabpanel" aria-labelledby="availability-tab">
+
+            <div class="container mt-2">
+                <h1 class="text-center" id="project_name">{{ project.name }}</h1>
+                <div class="row justify-content-center">
+                    <div class="col-2">
+                        <button type="button" id="upload_availability_button" class="btn btn-success">Save</button>
+                    </div>
+
+                    <div class="col-10">
+                        <table
+                                id="table"
+                                data-minimum-count-columns="2"
+                                data-id-field="id"
+                                data-unique-id="slots"
+                                data-response-handler="responseHandler">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="schedule" class="tab-pane fade show" role="tabpanel" aria-labelledby="schedule-tab">
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <table
+                            id="table-schedule"
+                            data-minimum-count-columns="2"
+                            data-id-field="id"
+                            data-unique-id="slots"
+                            data-response-handler="responseHandler">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'scheduler/scripts/availability.js' %}"></script>
+{% endblock %}
